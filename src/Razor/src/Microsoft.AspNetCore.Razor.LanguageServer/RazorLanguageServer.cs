@@ -26,7 +26,6 @@ using OmniSharp.Extensions.JsonRpc;
 using OmniSharp.Extensions.LanguageServer.Protocol.Serialization;
 using OmniSharp.Extensions.LanguageServer.Protocol.Server;
 using OmniSharp.Extensions.LanguageServer.Server;
-using ILanguageServer = OmniSharp.Extensions.LanguageServer.Server.ILanguageServer;
 using System.Threading;
 using Microsoft.AspNetCore.Razor.LanguageServer.Refactoring;
 using Microsoft.AspNetCore.Razor.LanguageServer.Definition;
@@ -62,14 +61,22 @@ namespace Microsoft.AspNetCore.Razor.LanguageServer
             Serializer.Instance.JsonSerializer.Converters.RegisterRazorConverters();
 
             ILanguageServer server = null;
+            var logLevel = trace switch
+            {
+                Trace.Messages => LogLevel.Information,
+                Trace.Off => LogLevel.None,
+                Trace.Verbose => LogLevel.Trace,
+                _ => default,
+            };
+
             server = OmniSharp.Extensions.LanguageServer.Server.LanguageServer.PreInit(options =>
                 options
                     .WithInput(input)
                     .WithOutput(output)
                     .ConfigureLogging(builder => builder
-                        .AddLanguageServer(RazorLSPOptions.GetLogLevelForTrace(trace))
-                        .SetMinimumLevel(LogLevel.Trace)) // We set the minimum level here to "Trace" to ensure that other providers still get the opportunity to act on logs if they prefer.
-                    .OnInitialized(async (s, request, response) =>
+                        .SetMinimumLevel(RazorLSPOptions.GetLogLevelForTrace(trace))
+                        .AddLanguageProtocolLogging(logLevel))
+                    .OnInitialized(async (s, request, response, cancellationToken) =>
                     {
                         var jsonRpcHandlers = s.Services.GetServices<IJsonRpcHandler>();
                         var registrationExtensions = jsonRpcHandlers.OfType<IRegistrationExtension>();

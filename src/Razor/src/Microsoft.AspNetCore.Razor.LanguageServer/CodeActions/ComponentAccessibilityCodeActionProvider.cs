@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Razor.LanguageServer.Common;
 using Microsoft.CodeAnalysis.Razor;
 using Microsoft.VisualStudio.Editor.Razor;
 using Newtonsoft.Json.Linq;
+using OmniSharp.Extensions.LanguageServer.Protocol;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 
 namespace Microsoft.AspNetCore.Razor.LanguageServer.CodeActions
@@ -68,7 +69,7 @@ namespace Microsoft.AspNetCore.Razor.LanguageServer.CodeActions
 
         private void AddCreateComponentFromTag(RazorCodeActionContext context, MarkupStartTagSyntax startTag, List<CommandOrCodeAction> container)
         {
-            var path = context.Request.TextDocument.Uri.GetAbsoluteOrUNCPath();
+            var path = context.Request.TextDocument.Uri.ToUri().GetAbsoluteOrUNCPath();
             path = _filePathNormalizer.Normalize(path);
             var newComponentPath = Path.Combine(Path.GetDirectoryName(path), $"{startTag.Name.Content}.razor");
             if (File.Exists(newComponentPath))
@@ -78,7 +79,7 @@ namespace Microsoft.AspNetCore.Razor.LanguageServer.CodeActions
 
             var actionParams = new CreateComponentCodeActionParams
             {
-                Uri = context.Request.TextDocument.Uri,
+                Uri = context.Request.TextDocument.Uri.ToUri(),
                 Path = newComponentPath,
             };
             var data = JObject.FromObject(actionParams);
@@ -116,7 +117,7 @@ namespace Microsoft.AspNetCore.Razor.LanguageServer.CodeActions
                 var namespaceName = tagHelperPair.Short.Name.Substring(namespaceSpan.Start, namespaceSpan.Length);
                 var actionParams = new AddUsingsCodeActionParams
                 {
-                    Uri = context.Request.TextDocument.Uri,
+                    Uri = context.Request.TextDocument.Uri.ToUri(),
                     Namespace = namespaceName,
                 };
                 var data = JObject.FromObject(actionParams);
@@ -207,7 +208,7 @@ namespace Microsoft.AspNetCore.Razor.LanguageServer.CodeActions
             }
             return new WorkspaceEdit
             {
-                Changes = new Dictionary<Uri, IEnumerable<TextEdit>> {
+                Changes = new Dictionary<DocumentUri, IEnumerable<TextEdit>> {
                     [context.Request.TextDocument.Uri] = changes,
                 }
             };

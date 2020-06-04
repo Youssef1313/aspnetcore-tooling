@@ -64,12 +64,13 @@ namespace Microsoft.VisualStudio.LanguageServerClient.Razor.HtmlCSharp
 
             var serializedParams = JToken.FromObject(parameters);
 
-            var (_, resultToken) = await _languageServiceBroker.RequestAsync(
-                new[] { contentType },
+            var task = _languageServiceBroker.RequestAsync(new[] { contentType },
                 token => true,
                 method,
                 serializedParams,
-                cancellationToken).ConfigureAwait(false);
+                cancellationToken);
+            var configTask = task.ConfigureAwait(false);
+            var(_, resultToken) = await configTask;
 
             var result = resultToken != null ? resultToken.ToObject<TOut>(_serializer) : default;
             return result;

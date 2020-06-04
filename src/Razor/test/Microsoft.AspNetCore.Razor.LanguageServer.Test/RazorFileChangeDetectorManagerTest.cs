@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
-using OmniSharp.Extensions.LanguageServer.Server;
+using OmniSharp.Extensions.LanguageServer.Protocol.Server;
 using Xunit;
 
 namespace Microsoft.AspNetCore.Razor.LanguageServer
@@ -22,7 +22,7 @@ namespace Microsoft.AspNetCore.Razor.LanguageServer
             {
                 RootUri = new Uri(expectedWorkspaceDirectory),
             };
-            var languageServer = Mock.Of<ILanguageServer>(server => server.ClientSettings == clientSettings);
+            var languageServer = Mock.Of<ILanguageServer>();
             var detector1 = new Mock<IFileChangeDetector>(MockBehavior.Strict);
             detector1.Setup(detector => detector.StartAsync(expectedWorkspaceDirectory, It.IsAny<CancellationToken>()))
                 .Returns(Task.CompletedTask)
@@ -51,7 +51,7 @@ namespace Microsoft.AspNetCore.Razor.LanguageServer
             {
                 RootUri = new Uri(expectedWorkspaceDirectory),
             };
-            var languageServer = Mock.Of<ILanguageServer>(server => server.ClientSettings == clientSettings);
+            var languageServer = Mock.Of<ILanguageServer>();
             var detector = new Mock<IFileChangeDetector>(MockBehavior.Strict);
             var cts = new TaskCompletionSource<bool>();
             detector.Setup(d => d.StartAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
