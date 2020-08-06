@@ -26,7 +26,7 @@ export class RazorRenameProvider
     public async prepareRename(
         document: vscode.TextDocument,
         position: vscode.Position,
-        token: vscode.CancellationToken): Promise<vscode.Range | undefined> {
+        token: vscode.CancellationToken): Promise<vscode.Range | undefined | null> {
 
         const projection = await this.getProjection(document, position, token);
         if (!projection || projection.languageKind !== LanguageKind.CSharp) {
