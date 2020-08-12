@@ -38,3 +38,11 @@ using Microsoft.VisualStudio.Shell;
     OldVersionLowerBound = "0.0.0.0",
     OldVersionUpperBound = "5.0.0.0",
     NewVersion = "5.0.0.0")]
+[assembly: ProvideBindingRedirection(
+    AssemblyName = "MediatR",
+    GenerateCodeBase = true,
+    PublicKeyToken = "bb9a41a5e8aaa7e2",
+    OldVersionLowerBound = "8.0.0.0",
+    OldVersionUpperBound = "8.0.0.0",
+    NewVersion = "8.0.1.0"
+)]

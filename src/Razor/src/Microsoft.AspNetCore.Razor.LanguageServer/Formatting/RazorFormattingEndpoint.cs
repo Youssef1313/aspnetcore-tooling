@@ -66,9 +66,17 @@ namespace Microsoft.AspNetCore.Razor.LanguageServer.Formatting
             _logger = loggerFactory.CreateLogger<RazorFormattingEndpoint>();
         }
 
-        public DocumentRangeFormattingRegistrationOptions GetRegistrationOptions()
+        DocumentRangeFormattingRegistrationOptions IRegistration<DocumentRangeFormattingRegistrationOptions>.GetRegistrationOptions()
         {
             return new DocumentRangeFormattingRegistrationOptions
+            {
+                DocumentSelector = RazorDefaults.Selector,
+            };
+        }
+
+        DocumentFormattingRegistrationOptions IRegistration<DocumentFormattingRegistrationOptions>.GetRegistrationOptions()
+        {
+            return new DocumentFormattingRegistrationOptions
             {
                 DocumentSelector = RazorDefaults.Selector,
             };
@@ -147,5 +155,6 @@ namespace Microsoft.AspNetCore.Razor.LanguageServer.Formatting
         {
             _rangeFormattingCapability = capability;
         }
+
     }
 }
