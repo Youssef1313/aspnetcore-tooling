@@ -46,9 +46,9 @@ using Microsoft.VisualStudio.Shell;
     OldVersionUpperBound = "8.0.0.0",
     NewVersion = "8.0.1.0")]
 [assembly: ProvideBindingRedirection(
-    AssemblyName = "MediatR.Extensions.Microsoft.DependencyInjection",
+    AssemblyName = "Microsoft.Extensions.DependencyInjection.Abstractions",
     GenerateCodeBase = true,
-    PublicKeyToken = "bb9a41a5e8aaa7e2",
-    OldVersionLowerBound = "8.0.0.0",
-    OldVersionUpperBound = "8.0.0.0",
-    NewVersion = "8.0.1.0")]
+    PublicKeyToken = "adb9793829ddae60",
+    OldVersionLowerBound = "2.0.0.0",
+    OldVersionUpperBound = "2.0.0.0",
+    NewVersion = "3.1.0.0")]
