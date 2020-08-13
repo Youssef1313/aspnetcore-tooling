@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Razor.Language;
 using Microsoft.AspNetCore.Razor.Test.Common;
 using Microsoft.CodeAnalysis.Razor.ProjectSystem;
 using Microsoft.CodeAnalysis.Text;
+using Moq;
 using Newtonsoft.Json.Linq;
 using OmniSharp.Extensions.JsonRpc;
 using OmniSharp.Extensions.LanguageServer.Protocol.Document;
@@ -472,7 +473,11 @@ namespace Microsoft.AspNetCore.Razor.LanguageServer
 
                 IResponseRouterReturns IResponseRouter.SendRequest<T>(string method, T @params)
                 {
-                    throw new NotImplementedException();
+                    var updateRequest = @params as UpdateBufferRequest;
+
+                    _updateRequests.Add(updateRequest);
+
+                    return new Mock<IResponseRouterReturns>(MockBehavior.Strict).Object;
                 }
 
                 public IResponseRouterReturns SendRequest(string method)

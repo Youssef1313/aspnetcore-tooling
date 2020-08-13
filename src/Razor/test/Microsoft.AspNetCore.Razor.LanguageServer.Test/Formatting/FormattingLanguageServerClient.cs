@@ -77,6 +77,31 @@ namespace Microsoft.AspNetCore.Razor.LanguageServer.Formatting
             return response;
         }
 
+        private class ResponseRouterReturns : IResponseRouterReturns
+        {
+            private object _response;
+
+            public ResponseRouterReturns(object response)
+            {
+                _response = response;
+            }
+
+            public Task<TResponse> Returning<TResponse>(CancellationToken cancellationToken)
+            {
+                return Task.FromResult((TResponse)_response);
+            }
+
+            public Task ReturningVoid(CancellationToken cancellationToken)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        private static IResponseRouterReturns Convert<T>(T instance)
+        {
+            return new ResponseRouterReturns(instance);
+        }
+
         private static TResponse Convert<T, TResponse>(T instance)
         {
             var parameter = Expression.Parameter(typeof(T));
@@ -101,7 +126,7 @@ namespace Microsoft.AspNetCore.Razor.LanguageServer.Formatting
 
             var response = Format(formattingParams);
 
-            return Convert<RazorDocumentRangeFormattingResponse, IResponseRouterReturns>(response);
+            return Convert<RazorDocumentRangeFormattingResponse>(response);
         }
 
         public IResponseRouterReturns SendRequest(string method)

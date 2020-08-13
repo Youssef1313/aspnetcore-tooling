@@ -28,7 +28,7 @@ namespace Microsoft.AspNetCore.Razor.LanguageServer
                 return _languageServer.ClientSettings.RootPath;
             }
 
-            return _languageServer.ClientSettings.RootUri.Path;
+            return _languageServer.ClientSettings.RootUri.ToUri().LocalPath;
         }
     }
 }

@@ -83,7 +83,7 @@ namespace Microsoft.AspNetCore.Razor.LanguageServer
             else
             {
                 languageServer
-                    .Setup(l => l.Client.SendRequest<object[]>("workspace/configuration", new object[] { It.IsAny<ConfigurationParams>() }))
+                    .Setup(l => l.Client.SendRequest("workspace/configuration", It.IsAny<ConfigurationParams>()))
                     .Returns(result);
             }
             return languageServer.Object;
