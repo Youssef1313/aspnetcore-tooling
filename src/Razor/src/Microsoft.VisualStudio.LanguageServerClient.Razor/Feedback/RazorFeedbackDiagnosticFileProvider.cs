@@ -13,8 +13,8 @@ using Microsoft.VisualStudio.Threading;
 
 namespace Microsoft.VisualStudio.LanguageServerClient.Razor.Feedback
 {
-    [Shared]
-    [Export(typeof(IFeedbackDiagnosticFileProvider))]
+    // [Shared]
+    // [Export(typeof(IFeedbackDiagnosticFileProvider))]
     internal class RazorFeedbackDiagnosticFileProvider : IFeedbackDiagnosticFileProvider
     {
         private readonly Lazy<FeedbackLogDirectoryProvider> _feedbackLogDirectoryProvider;
